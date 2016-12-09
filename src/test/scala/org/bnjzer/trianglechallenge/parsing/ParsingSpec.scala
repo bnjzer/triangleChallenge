@@ -24,26 +24,26 @@ class ParsingSpec extends UnitSpec {
     Parsing.parseDoubleStr(".17").get shouldBe "0.17"
   }
 
-  it should "return a Failure with a ParsingException when the number contains other than a digit or a point" in {
-    assertThrows[ParsingException] {
+  it should "return a Failure with a IllegalArgumentException when the number contains other than a digit or a point" in {
+    assertThrows[IllegalArgumentException] {
       Parsing.parseDoubleStr("65y.4").get
     }
   }
 
-  it should "return a Failure with a ParsingException when the number contains 2 points" in {
-    assertThrows[ParsingException] {
+  it should "return a Failure with a IllegalArgumentException when the number contains 2 points" in {
+    assertThrows[IllegalArgumentException] {
       Parsing.parseDoubleStr("54.87.87").get
     }
   }
 
-  it should "return a Failure with a ParsingException when the number is null" in {
-    assertThrows[ParsingException] {
+  it should "return a Failure with a IllegalArgumentException when the number is null" in {
+    assertThrows[IllegalArgumentException] {
       Parsing.parseDoubleStr(null).get
     }
   }
 
-  it should "return a Failure with a ParsingException when the number is empty" in {
-    assertThrows[ParsingException] {
+  it should "return a Failure with a IllegalArgumentException when the number is empty" in {
+    assertThrows[IllegalArgumentException] {
       Parsing.parseDoubleStr("").get
     }
   }
@@ -54,14 +54,14 @@ class ParsingSpec extends UnitSpec {
     assert(result.get.head == "1.0" && result.get(1) == "2.0" && result.get(2) == "0.34")
   }
 
-  it should "return a Failure with a ParsingException if at least one of the string is not a valid number" in {
-    assertThrows[ParsingException] {
+  it should "return a Failure with a IllegalArgumentException if at least one of the string is not a valid number" in {
+    assertThrows[IllegalArgumentException] {
       Parsing.parseSeqOfDoublesStr(Seq("1", "e2.")).get
     }
   }
 
-  it should "return a Failure with a ParsingException if the sequence is null" in {
-    assertThrows[ParsingException] {
+  it should "return a Failure with a IllegalArgumentException if the sequence is null" in {
+    assertThrows[IllegalArgumentException] {
       Parsing.parseSeqOfDoublesStr(null).get
     }
   }

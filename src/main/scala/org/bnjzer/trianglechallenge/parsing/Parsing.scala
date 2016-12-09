@@ -24,12 +24,12 @@ object Parsing {
     *         or an exception otherwise
     */
   def parseDoubleStr(doubleStr: String): Try[String] = {
-    if (doubleStr == null || doubleStr.isEmpty)
-      Failure(new ParsingException("The input string is null or empty"))
+    if (Option(doubleStr) == None || doubleStr.isEmpty)
+      Failure(new IllegalArgumentException("The input string is null or empty"))
     else {
       // We check that the string has a good format using a regex. At this point We know that the string is not empty.
       // "." would be a valid input and would become 0.0
-      val doubleFormat = new Regex("^\\d*.?\\d*$")
+      val doubleFormat = new Regex("^\\d*\\.?\\d*$")
 
       doubleStr match {
         case doubleFormat() =>
@@ -51,7 +51,7 @@ object Parsing {
             Success(result.toString)
           } else
             Success(result.toString.replaceAll("(\\.\\d)0+$", "$1"))
-        case _ => Failure(new ParsingException(s"$doubleStr is not a valid number"))
+        case _ => Failure(new IllegalArgumentException(s"$doubleStr is not a valid number"))
       }
     }
   }
@@ -66,9 +66,9 @@ object Parsing {
     * @return [[Try]] with all the values well formatted or an exception if the strings can't be well parsed
     */
   def parseSeqOfDoublesStr(seqOfDoublesStr: Seq[String]): Try[Seq[String]] = {
-    if (seqOfDoublesStr == null)
-      Failure(new ParsingException("Sequence of strings to parse is null"))
-    else
-      Try(seqOfDoublesStr.map(parseDoubleStr).map(_.get))
+    Option(seqOfDoublesStr) match {
+      case Some(seq) => Try(seqOfDoublesStr.map(parseDoubleStr).map(_.get))
+      case None => Failure(new IllegalArgumentException("Sequence of strings to parse is null"))
+    }
   }
 }

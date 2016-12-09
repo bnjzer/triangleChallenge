@@ -1,7 +1,7 @@
 package org.bnjzer.trianglechallenge
 
-import org.bnjzer.trianglechallenge.parsing.{Parsing, ParsingException}
-import org.bnjzer.trianglechallenge.shapes.{Triangle, TriangleException}
+import org.bnjzer.trianglechallenge.parsing.Parsing
+import org.bnjzer.trianglechallenge.shapes.Triangle
 
 import scala.util.{Failure, Success}
 
@@ -34,12 +34,11 @@ object TriangleChallenge {
     if (args.length != 3) error("you must give 3 arguments")
 
     Parsing.parseSeqOfDoublesStr(args.toSeq)
-      .flatMap(sides => Triangle.buildFromStrings(sides.head, sides(1), sides(2))) match {
+      .flatMap(sides => Triangle.buildFromStrings(sides)) match {
         case Success(triangle) => println(triangle)
         case Failure(ex) =>
           ex match {
-            case e: ParsingException => error(s"couldn't parse the arguments: ${e.getMessage}")
-            case e: TriangleException => error(s"couldn't create the triangle: ${e.getMessage}")
+            case e: IllegalArgumentException => error(s"couldn't create a triangle from these arguments: ${e.getMessage}")
             case _ => error(s"unexpected failure happened: ${ex.getMessage}")
           }
       }
